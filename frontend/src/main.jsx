@@ -178,7 +178,7 @@ function App() {
 }
 function Login({ api, onLogin }) {
   const [email, setEmail] = useState("operator@demo.local"),
-    [password, setPassword] = useState("DemoPass123!"),
+    [password, setPassword] = useState(""),
     [error, setError] = useState(""),
     [loading, setLoading] = useState(false);
   const submit = async (e) => {
@@ -221,12 +221,21 @@ function Login({ api, onLogin }) {
         <p>Use a seeded demo account to begin.</p>
         <label>
           Email
-          <input disabled={loading} value={email} onChange={(e) => setEmail(e.target.value)} />
+          <input
+            type="email"
+            autoComplete="username"
+            required
+            disabled={loading}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
         </label>
         <label>
           Password
           <input
             type="password"
+            autoComplete="current-password"
+            required
             disabled={loading}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
