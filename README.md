@@ -108,6 +108,7 @@ Deploy the FastAPI backend on **Render** using `render.yaml`. The React frontend
 - Its colors and animation are in the clearly marked **Login evening scene** section of `frontend/src/styles.css`. Start with the scoped `--scene-*` variables to change the palette.
 - The sign-in progress indicator is isolated in `frontend/src/components/LoginLoader.jsx`, with styles under **Login progress indicator**.
 - Both animations respect the device's reduced-motion preference.
+- The signed-in application theme is controlled by the **Authenticated cyber theme** section in `frontend/src/styles.css`. Change its scoped `--cyber-*` variables to update the background, cards, text, borders, and accent colors together.
 
 ## Deliverables
 

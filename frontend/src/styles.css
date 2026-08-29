@@ -249,6 +249,79 @@ textarea { resize: vertical; }
 .timeline li { display: flex; flex-direction: column; gap: 3px; padding: 0 0 16px 12px; border-left: 2px solid #b9d6d5; }
 .timeline small { color: #7a8798; }
 
+/* Authenticated cyber theme — edit these variables to retheme every session page */
+.app {
+  --cyber-bg: #05070b;
+  --cyber-surface: rgba(12, 22, 34, .88);
+  --cyber-surface-strong: rgba(16, 30, 45, .96);
+  --cyber-surface-soft: rgba(21, 42, 56, .78);
+  --cyber-cyan: #41d7dc;
+  --cyber-magenta: #c76bd8;
+  --cyber-text: #e7f2f5;
+  --cyber-muted: #9eb0bf;
+  --cyber-border: rgba(65, 215, 220, .22);
+  position: relative;
+  color: var(--cyber-text);
+  background: var(--cyber-bg);
+  isolation: isolate;
+}
+.app::before {
+  position: fixed;
+  z-index: -1;
+  inset: 0;
+  background-color: var(--cyber-bg);
+  background-image:
+    radial-gradient(circle at center, transparent 25%, #020304 92%),
+    linear-gradient(rgba(3, 233, 244, .09) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(3, 233, 244, .09) 1px, transparent 1px),
+    linear-gradient(rgba(217, 3, 244, .045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(217, 3, 244, .045) 1px, transparent 1px);
+  background-size: 100% 100%, 60px 60px, 60px 60px, 20px 20px, 20px 20px;
+  content: "";
+  animation: cyber-move 12s linear infinite;
+}
+.app .sidebar, .app .sidebar-footer { background: rgba(5, 13, 24, .92); backdrop-filter: blur(16px); }
+.app .sidebar { border-right: 1px solid var(--cyber-border); box-shadow: 12px 0 40px rgba(0, 0, 0, .3); }
+.app .nav:hover, .app .nav:focus-visible, .app .nav.active { background: linear-gradient(90deg, rgba(65, 215, 220, .18), rgba(199, 107, 216, .1)); box-shadow: inset 3px 0 var(--cyber-cyan); }
+.app .content { position: relative; }
+.app header p, .app .hint, .app .cards span, .app .activity span, .app .role-metrics span, .app .timeline small { color: var(--cyber-muted); }
+.app .user, .app .panel, .app .cards article {
+  border-color: var(--cyber-border);
+  color: var(--cyber-text);
+  background: linear-gradient(145deg, var(--cyber-surface-strong), var(--cyber-surface));
+  box-shadow: 0 10px 32px rgba(0, 0, 0, .22), inset 0 1px rgba(255, 255, 255, .025);
+  backdrop-filter: blur(12px);
+}
+.app .panel, .app .cards article { transition: transform .22s ease, border-color .22s ease, box-shadow .22s ease; }
+.app .panel:hover, .app .cards article:hover { border-color: rgba(65, 215, 220, .43); box-shadow: 0 14px 38px rgba(0, 0, 0, .3), 0 0 22px rgba(65, 215, 220, .06); transform: translateY(-2px); }
+.app .role-metrics b, .app .pipeline { color: var(--cyber-text); }
+.app .dark { color: var(--cyber-cyan); }
+.app input, .app select, .app textarea { border-color: rgba(118, 159, 176, .34); color: var(--cyber-text); background: rgba(3, 10, 18, .72); }
+.app input::placeholder, .app textarea::placeholder { color: #778b99; }
+.app option { color: var(--cyber-text); background: #0d1925; }
+.app .secondary { color: #bff7f5; background: rgba(65, 215, 220, .14); }
+.app .primary { background: linear-gradient(120deg, #087985, #725184); box-shadow: 0 5px 18px rgba(7, 121, 133, .2); }
+.app .primary:hover, .app .secondary:hover { filter: brightness(1.13); }
+.app .notice { border-color: rgba(65, 215, 220, .35); color: #d9f8f3; background: rgba(15, 76, 73, .76); }
+.app .record-table, .app .normalization, .app .ai-workbench, .app .comments, .app .decision, .app .failed { border-color: var(--cyber-border); }
+.app .record-head, .app .source-json, .app .facts span, .app .source-compare pre, .app .prompt-preview, .app .comments p { color: var(--cyber-text); background: var(--cyber-surface-soft); }
+.app .record-item, .app .activity, .app .exception, .app .verified { border-color: var(--cyber-border); }
+.app .exception { color: var(--cyber-text); background: transparent; }
+.app .exception.selected { background: rgba(65, 215, 220, .12); }
+.app .exception small, .app .exception em, .app .facts b, .app .normalization p, .app .normalization small { color: var(--cyber-muted); }
+.app .normalization, .app .ai, .app .human-decision, .app .ai-output, .app .batch-summary-result, .app .rule-proposal-result, .app .next-step, .app .human-control { color: var(--cyber-text); background: rgba(12, 36, 48, .86); }
+.app .normalization summary, .app .ai > span, .app .ai > small, .app .ai details { color: #a9e8e5; }
+.app .source-evidence-grid > div, .app .priority-actions article, .app .issue-groups article, .app .proposed-rule-card, .app .test-cases article { border-color: var(--cyber-border); color: var(--cyber-text); background: rgba(6, 16, 25, .65); }
+.app .priority-actions p, .app .issue-groups p, .app .proposed-rule-card p, .app .test-cases p, .app .priority-actions small, .app .issue-groups small, .app .summary-meta { color: var(--cyber-muted); }
+.app .rule-examples { color: var(--cyber-muted); }
+.app .rule-examples button { border-color: var(--cyber-border); color: #bff7f5; background: rgba(65, 215, 220, .1); }
+.app .rule-examples button:hover { background: rgba(65, 215, 220, .2); }
+
+@keyframes cyber-move {
+  from { background-position: 0 0, 0 0, 0 0, 0 0, 0 0; }
+  to { background-position: 0 0, 60px 60px, 60px 60px, 40px 40px, 40px 40px; }
+}
+
 /* Authentication */
 .login { display: grid; min-height: 100dvh; grid-template-columns: minmax(0, 1.2fr) minmax(360px, .8fr); color: #f4f7fb; background: #07101f; }
 .login-intro { position: relative; display: flex; min-height: 100dvh; align-items: center; overflow: hidden; padding: clamp(52px, 14vh, 140px) clamp(30px, 12vw, 180px); isolation: isolate; }
@@ -315,8 +388,9 @@ textarea { resize: vertical; }
 @keyframes login-loader-spin { to { transform: rotate(360deg); } }
 
 @media (prefers-reduced-motion: reduce) {
-  .scene-stars i, .scene-moon, .scene-cloud, .windmill-blades, .login-loader-ring { animation: none; }
+  .app::before, .scene-stars i, .scene-moon, .scene-cloud, .windmill-blades, .login-loader-ring { animation: none; }
   .login-intro:hover .scene-windmill { transform: none; }
+  .app .panel, .app .cards article { transition: none; }
 }
 
 /* Responsive layout */
