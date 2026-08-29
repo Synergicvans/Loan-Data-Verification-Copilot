@@ -45,7 +45,7 @@ function extractErrorText(value) {
 function getApiError(payload, status, path) {
   if (status === 401)
     return path === "/auth/login"
-      ? "Incorrect email or password."
+      ? extractErrorText(payload) || "Incorrect email or password."
       : "Your session has expired. Please sign in again.";
   if (status === 403) return "You do not have permission for this action.";
   if (status === 404) return extractErrorText(payload) || "Requested data was not found.";
@@ -215,6 +215,10 @@ function Login({ api, onLogin }) {
     e.preventDefault();
     if (loading) return;
     setError("");
+    if (password.length < 8) {
+      setError("Password must be at least 8 characters.");
+      return;
+    }
     setLoading(true);
     try {
       onLogin(
@@ -266,6 +270,7 @@ function Login({ api, onLogin }) {
             type="password"
             autoComplete="current-password"
             required
+            minLength={8}
             disabled={loading}
             value={password}
             onChange={(e) => setPassword(e.target.value)}

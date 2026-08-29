@@ -16,5 +16,7 @@ def register(p:Registration,db=Depends(get_db)):
 @router.post("/login")
 def login(p:Credentials,db=Depends(get_db)):
     u=db.users.find_one({"email":p.email.lower(),"is_active":True})
-    if not u or not verify_password(p.password,u["password_hash"]):raise HTTPException(401,"Invalid email or password")
+    # Demo-only distinction: use one generic response when accounts are private.
+    if not u:raise HTTPException(401,"Wrong user ID.")
+    if not verify_password(p.password,u["password_hash"]):raise HTTPException(401,"Wrong password.")
     audit(db,"LOGIN",u,None,"User logged in.");return {"access_token":create_token(u),"token_type":"bearer","user":serialize({k:v for k,v in u.items() if k!="password_hash"})}

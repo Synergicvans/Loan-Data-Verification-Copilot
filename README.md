@@ -52,6 +52,8 @@ Demo accounts are `operator@demo.local`, `reviewer@demo.local`, and `consumer@de
 
 All three accounts use the password `DemoPass123!`.
 
+This demo returns separate “Wrong user ID” and “Wrong password” login messages because its seeded accounts are public. For a production system with private accounts, replace them with one generic authentication error to prevent account enumeration.
+
 | Role | Email | Main responsibilities |
 |---|---|---|
 | Data Operator | `operator@demo.local` | Uploads CSV source files and checks import batches. |
