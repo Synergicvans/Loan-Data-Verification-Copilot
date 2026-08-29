@@ -354,6 +354,7 @@ textarea { resize: vertical; }
 .login form { position: relative; display: flex; align-self: center; flex-direction: column; gap: 15px; margin: 30px 24px; padding: 36px; }
 .login-card { z-index: 4; width: min(410px, calc(100% - 48px)); border: 1px solid rgba(255, 255, 255, .055); border-radius: 30px; color: #f1f4f5; background: rgba(33, 33, 33, .97); box-shadow: 15px 15px 30px rgba(10, 13, 18, .72), -12px -12px 30px rgba(77, 86, 101, .22); backdrop-filter: blur(10px); }
 .login form p, .login small { color: #aeb6bd; }
+.login-card .error { color: #ff958c; font-weight: 700; }
 .login label { display: flex; flex-direction: column; gap: 8px; font-size: 13px; font-weight: bold; }
 .login-card input { border-color: #42484d; color: #f4f7f8; background: #181a1b; }
 .login-card input:focus { border-color: var(--mint); outline: 2px solid rgba(99, 215, 198, .14); }
@@ -407,20 +408,13 @@ textarea { resize: vertical; }
 .windmill-blades b { position: absolute; z-index: 2; width: 20px; height: 20px; border-radius: 50%; background: #d39159; transform: translate(-10px, -10px); box-shadow: 0 0 12px rgba(211, 145, 89, .35); }
 .scene-grass { position: absolute; z-index: 2; right: 0; bottom: 0; left: 0; height: 20%; opacity: .5; background: repeating-linear-gradient(78deg, transparent 0 13px, #19372e 14px 16px, transparent 17px 22px); }
 
-/* Login progress indicator */
-.login-loader { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border: 1px solid #cce2e0; border-radius: 9px; color: #163e44; background: #f1faf9; }
-.login-loader-ring { flex: 0 0 auto; width: 24px; height: 24px; border: 3px solid #bcded9; border-top-color: var(--teal); border-radius: 50%; animation: login-loader-spin .8s linear infinite; }
-.login-loader-copy { display: flex; flex-direction: column; gap: 2px; }
-.login-loader-copy strong { font-size: 13px; }.login-loader-copy small { font-size: 11px; }
-
 @keyframes blades-spin { to { transform: rotate(360deg); } }
 @keyframes moon-float { 50% { transform: translateY(8px); } }
 @keyframes scene-twinkle { from { opacity: .2; } to { opacity: 1; } }
 @keyframes cloud-drift { to { transform: translateX(calc(100vw + 300px)); } }
-@keyframes login-loader-spin { to { transform: rotate(360deg); } }
 
 @media (prefers-reduced-motion: reduce) {
-  .app::before, .scene-stars i, .scene-celestial, .scene-cloud, .windmill-blades, .login-loader-ring, .speed-loader-art, .speed-trails i, .speed-lines i { animation: none; }
+  .app::before, .scene-stars i, .scene-celestial, .scene-cloud, .windmill-blades, .speed-loader-art, .speed-trails i, .speed-lines i { animation: none; }
   .login-intro:hover .scene-windmill { transform: none; }
   .app .panel, .app .cards article { transition: none; }
 }

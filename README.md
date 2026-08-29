@@ -106,8 +106,7 @@ Deploy the FastAPI backend on **Render** using `render.yaml`. The React frontend
 
 - The animated artwork is isolated in `frontend/src/components/EveningLoginScene.jsx`. It reads the visitor's local time and automatically switches between sunrise (05:00–10:00), daytime (10:00–17:00), sunset (17:00–20:00), and night (20:00–05:00).
 - Its colors and animation are in the clearly marked **Login evening scene** section of `frontend/src/styles.css`. Start with the scoped `--scene-*` variables to change the palette.
-- The sign-in progress indicator is isolated in `frontend/src/components/LoginLoader.jsx`, with styles under **Login progress indicator**.
-- The full-screen session transition used during sign-out is isolated in `frontend/src/components/SpeedLoader.jsx`, with styles under **Session transition loader**.
+- The full-screen session transition used during sign-in and sign-out is isolated in `frontend/src/components/SpeedLoader.jsx`, with styles under **Session transition loader**.
 - Both animations respect the device's reduced-motion preference.
 - The signed-in application theme is controlled by the **Authenticated cyber theme** section in `frontend/src/styles.css`. Change its scoped `--cyber-*` variables to update the background, cards, text, borders, and accent colors together.
 

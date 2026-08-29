@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
 import Sidebar from "./components/Sidebar";
 import EveningLoginScene from "./components/EveningLoginScene";
-import LoginLoader from "./components/LoginLoader";
 import SpeedLoader from "./components/SpeedLoader";
 import { API_URL } from "./lib/api";
 import "./styles.css";
@@ -27,6 +26,37 @@ function hasSafeAiSuggestion(response) {
       response.suggested_value !== "",
   );
 }
+
+function extractErrorText(value) {
+  if (typeof value === "string") return value;
+  if (Array.isArray(value)) {
+    return value.map(extractErrorText).filter(Boolean).join("; ");
+  }
+  if (value && typeof value === "object") {
+    if (typeof value.msg === "string") return value.msg;
+    for (const key of ["message", "error", "detail"]) {
+      const text = extractErrorText(value[key]);
+      if (text) return text;
+    }
+  }
+  return "";
+}
+
+function getApiError(payload, status, path) {
+  if (status === 401)
+    return path === "/auth/login"
+      ? "Incorrect email or password."
+      : "Your session has expired. Please sign in again.";
+  if (status === 403) return "You do not have permission for this action.";
+  if (status === 404) return extractErrorText(payload) || "Requested data was not found.";
+  if (status === 409) return extractErrorText(payload) || "This action conflicts with existing data.";
+  if (status === 413) return "The selected file is too large.";
+  if (status === 422) return extractErrorText(payload?.detail) || "Please check the entered information.";
+  if (status === 429) return "Too many requests. Please wait and try again.";
+  if (status >= 500) return "The server could not complete the request. Please try again.";
+  return extractErrorText(payload) || "The request could not be completed.";
+}
+
 function App() {
   const [token, setToken] = useState(localStorage.getItem("token") || "");
   const [user, setUser] = useState(
@@ -38,24 +68,24 @@ function App() {
   const [uploadResult, setUploadResult] = useState(null);
   const [signingOut, setSigningOut] = useState(false);
   const api = async (path, options = {}) => {
-    const res = await fetch(`${API}/api${path}`, {
-      ...options,
-      headers: {
-        ...(options.body instanceof FormData
-          ? {}
-          : { "Content-Type": "application/json" }),
-        ...(token ? { Authorization: `Bearer ${token}` } : {}),
-      },
-    });
+    let res;
+    try {
+      res = await fetch(`${API}/api${path}`, {
+        ...options,
+        headers: {
+          ...(options.body instanceof FormData
+            ? {}
+            : { "Content-Type": "application/json" }),
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+      });
+    } catch {
+      throw new Error("Cannot reach the server. Check your connection and try again.");
+    }
     const payload = await (res.headers.get("content-type")?.includes("json")
       ? res.json()
       : res.text());
-    if (!res.ok)
-      throw new Error(
-        typeof payload === "string"
-          ? payload
-          : payload.detail || "Request failed",
-      );
+    if (!res.ok) throw new Error(getApiError(payload, res.status, path));
     return payload;
   };
   const load = async (name, path) => {
@@ -241,15 +271,15 @@ function Login({ api, onLogin }) {
             onChange={(e) => setPassword(e.target.value)}
           />
         </label>
-        {error && <small className="error">{error}</small>}
+        {error && <small className="error" role="alert">{error}</small>}
         <button className="primary login-submit" disabled={loading}>
           {loading ? "Please wait…" : "Sign in"}
         </button>
-        {loading && <LoginLoader />}
         <small>
           Operator: upload · Reviewer: resolve · Consumer: verify/export
         </small>
       </form>
+      {loading && <SpeedLoader message="Verifying secure access…" />}
     </div>
   );
 }
