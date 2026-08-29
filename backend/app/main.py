@@ -12,7 +12,9 @@ async def lifespan(app):
         except Exception:pass
     yield
 s=get_settings();app=FastAPI(title="Loan Data Verification Copilot API",version="1.0.0",lifespan=lifespan)
-app.add_middleware(CORSMiddleware,allow_origins=[x.strip() for x in s.cors_origins.split(",")],allow_credentials=True,allow_methods=["*"],allow_headers=["*"])
+cors_origins={x.strip() for x in s.cors_origins.split(",") if x.strip()}
+cors_origins.add("https://loan-data-verification-copilot-7fh3.onrender.com")
+app.add_middleware(CORSMiddleware,allow_origins=sorted(cors_origins),allow_credentials=True,allow_methods=["*"],allow_headers=["*"])
 @app.get("/")
 def root():return {"service":"Loan Data Verification Copilot API","status":"ok","docs":"/docs","health":"/health"}
 @app.get("/health")
