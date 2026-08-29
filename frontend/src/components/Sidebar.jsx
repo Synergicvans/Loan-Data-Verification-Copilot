@@ -6,6 +6,7 @@ export default function Sidebar({
   setView,
   apiUrl,
   onLogout,
+  signingOut,
 }) {
   return (
     <aside className="sidebar" aria-label="Application navigation">
@@ -33,8 +34,8 @@ export default function Sidebar({
         >
           API Docs
         </button>
-        <button className="logout" onClick={onLogout}>
-          Sign out
+        <button className="logout" onClick={onLogout} disabled={signingOut}>
+          {signingOut ? "Signing out…" : "Sign out"}
         </button>
       </div>
     </aside>

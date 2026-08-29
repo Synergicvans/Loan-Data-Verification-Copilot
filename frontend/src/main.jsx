@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 import Sidebar from "./components/Sidebar";
 import EveningLoginScene from "./components/EveningLoginScene";
 import LoginLoader from "./components/LoginLoader";
+import SpeedLoader from "./components/SpeedLoader";
 import { API_URL } from "./lib/api";
 import "./styles.css";
 
@@ -35,6 +36,7 @@ function App() {
   const [message, setMessage] = useState("");
   const [data, setData] = useState({});
   const [uploadResult, setUploadResult] = useState(null);
+  const [signingOut, setSigningOut] = useState(false);
   const api = async (path, options = {}) => {
     const res = await fetch(`${API}/api${path}`, {
       ...options,
@@ -72,11 +74,16 @@ function App() {
     }
   }, [token]);
   const logout = () => {
-    localStorage.clear();
-    setToken("");
-    setUser(null);
-    setData({});
-    setView("dashboard");
+    if (signingOut) return;
+    setSigningOut(true);
+    window.setTimeout(() => {
+      localStorage.clear();
+      setToken("");
+      setUser(null);
+      setData({});
+      setView("dashboard");
+      setSigningOut(false);
+    }, 650);
   };
   if (!token || !user)
     return (
@@ -105,7 +112,9 @@ function App() {
         setView={setView}
         apiUrl={API}
         onLogout={logout}
+        signingOut={signingOut}
       />
+      {signingOut && <SpeedLoader />}
       <main className="content">
         <header>
           <div>
