@@ -250,16 +250,74 @@ textarea { resize: vertical; }
 .timeline small { color: #7a8798; }
 
 /* Authentication */
-.login { display: grid; min-height: 100dvh; grid-template-columns: minmax(0, 1.2fr) minmax(360px, .8fr); color: #f4f7fb; background: var(--navy); }
-.login section { padding: clamp(52px, 14vh, 140px) clamp(30px, 12vw, 180px); }
+.login { display: grid; min-height: 100dvh; grid-template-columns: minmax(0, 1.2fr) minmax(360px, .8fr); color: #f4f7fb; background: #07101f; }
+.login-intro { position: relative; display: flex; min-height: 100dvh; align-items: center; overflow: hidden; padding: clamp(52px, 14vh, 140px) clamp(30px, 12vw, 180px); isolation: isolate; }
+.login-intro-copy { position: relative; z-index: 3; text-shadow: 0 2px 24px rgba(0, 0, 0, .4); }
 .login h1 { font-size: clamp(42px, 5vw, 56px); line-height: 1.03; }
 .login em { color: var(--mint); font-style: normal; }
-.login section p { max-width: 520px; color: #b9c8db; font-size: 18px; line-height: 1.6; }
+.login-intro-copy > p { max-width: 520px; color: #c4cee0; font-size: 18px; line-height: 1.6; }
 .eyebrow { color: var(--mint); font-size: 11px; letter-spacing: 1.5px; }
 .dark { color: #566a85; }
-.login form { display: flex; align-self: center; flex-direction: column; gap: 15px; margin: 30px clamp(24px, 6vw, 100px); padding: 36px; border-radius: 13px; color: #17243b; background: #fff; }
+.login form { position: relative; display: flex; align-self: center; flex-direction: column; gap: 15px; margin: 30px clamp(24px, 6vw, 100px); padding: 36px; border: 1px solid #dfe6ee; border-radius: 13px; color: #17243b; background: #fff; box-shadow: 0 24px 70px rgba(0, 0, 0, .32); }
 .login form p, .login small { color: #718097; }
 .login label { display: flex; flex-direction: column; gap: 8px; font-size: 13px; font-weight: bold; }
+.login input:disabled { cursor: wait; opacity: .7; }
+.login-submit:disabled { cursor: wait; }
+
+/* Login evening scene — edit the scoped variables to retheme it */
+.login-scene {
+  --scene-sky-top: #061021;
+  --scene-sky-mid: #17264a;
+  --scene-sky-glow: #754b67;
+  --scene-moon: #ffe7ae;
+  --scene-hill-back: #172c38;
+  --scene-hill-front: #0b2027;
+  --scene-windmill: #101823;
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  overflow: hidden;
+  background: linear-gradient(165deg, var(--scene-sky-top) 5%, var(--scene-sky-mid) 55%, var(--scene-sky-glow) 115%);
+}
+.login-scene::after { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(3, 10, 22, .25), rgba(3, 10, 22, .05) 60%, rgba(3, 10, 22, .35)); content: ""; }
+.scene-stars i { position: absolute; width: 2px; height: 2px; border-radius: 50%; background: #fff; box-shadow: 0 0 6px #fff; animation: scene-twinkle 3s ease-in-out infinite alternate; }
+.scene-stars i:nth-child(1) { left: 8%; top: 13%; }.scene-stars i:nth-child(2) { left: 17%; top: 26%; }.scene-stars i:nth-child(3) { left: 25%; top: 9%; }.scene-stars i:nth-child(4) { left: 35%; top: 22%; }.scene-stars i:nth-child(5) { left: 47%; top: 12%; }.scene-stars i:nth-child(6) { left: 58%; top: 29%; }.scene-stars i:nth-child(7) { left: 68%; top: 8%; }.scene-stars i:nth-child(8) { left: 76%; top: 21%; }.scene-stars i:nth-child(9) { left: 88%; top: 12%; }.scene-stars i:nth-child(10) { left: 94%; top: 33%; }.scene-stars i:nth-child(11) { left: 12%; top: 43%; }.scene-stars i:nth-child(12) { left: 31%; top: 38%; }.scene-stars i:nth-child(13) { left: 54%; top: 43%; }.scene-stars i:nth-child(14) { left: 82%; top: 40%; }.scene-stars i:nth-child(15) { left: 6%; top: 31%; }.scene-stars i:nth-child(16) { left: 42%; top: 30%; }.scene-stars i:nth-child(17) { left: 64%; top: 18%; }.scene-stars i:nth-child(18) { left: 91%; top: 7%; }
+.scene-stars i:nth-child(3n) { width: 3px; height: 3px; animation-delay: -1.5s; }.scene-stars i:nth-child(4n) { animation-delay: -.75s; }
+.scene-moon { position: absolute; top: 10%; right: 12%; width: clamp(74px, 9vw, 120px); aspect-ratio: 1; border-radius: 50%; background: var(--scene-moon); box-shadow: 0 0 38px rgba(255, 227, 164, .35); animation: moon-float 7s ease-in-out infinite; }
+.scene-moon span { position: absolute; width: 17%; height: 17%; top: 28%; left: 20%; border-radius: 50%; background: rgba(180, 147, 113, .15); box-shadow: 29px 19px 0 3px rgba(180, 147, 113, .11), 12px 45px 0 -1px rgba(180, 147, 113, .1); }
+.scene-cloud { position: absolute; width: 180px; height: 30px; border-radius: 50%; background: rgba(152, 164, 193, .09); filter: blur(3px); animation: cloud-drift 24s linear infinite; }
+.scene-cloud-one { top: 23%; left: -190px; }.scene-cloud-two { top: 38%; left: -240px; width: 240px; animation-delay: -11s; animation-duration: 32s; }
+.scene-horizon { position: absolute; right: 0; bottom: 26%; left: 0; height: 30%; background: linear-gradient(transparent, rgba(223, 132, 117, .08)); }
+.scene-hill { position: absolute; right: -12%; bottom: -22%; left: -12%; height: 54%; border-radius: 50% 50% 0 0; transform: rotate(-3deg); }
+.scene-hill-back { bottom: -14%; left: 20%; background: var(--scene-hill-back); opacity: .82; transform: rotate(5deg); }
+.scene-hill-front { background: var(--scene-hill-front); }
+.scene-windmill { position: absolute; z-index: 2; right: 11%; bottom: 18%; width: 128px; height: 260px; transition: transform .35s ease; }
+.login-intro:hover .scene-windmill { transform: translateY(-4px); }
+.windmill-tower { position: absolute; right: 31px; bottom: 0; width: 68px; height: 185px; background: linear-gradient(100deg, #0c141e, var(--scene-windmill)); clip-path: polygon(25% 0, 75% 0, 100% 100%, 0 100%); }
+.windmill-tower i { position: absolute; bottom: 18px; left: 26px; width: 20px; height: 40px; border-radius: 9px 9px 0 0; background: #e8a866; box-shadow: 0 0 15px rgba(232, 168, 102, .5); }
+.windmill-cap { position: absolute; z-index: 2; top: 55px; left: 29px; width: 70px; height: 35px; border-radius: 55% 55% 8px 8px; background: #0a111a; }
+.windmill-blades { position: absolute; z-index: 3; top: 70px; left: 64px; width: 1px; height: 1px; animation: blades-spin 12s linear infinite; }
+.login-intro:hover .windmill-blades { animation-duration: 5s; }
+.windmill-blades span { position: absolute; left: -6px; bottom: 0; width: 12px; height: 105px; border: 3px solid #17212c; border-radius: 5px 5px 1px 1px; transform: rotate(calc(var(--blade-index) * 90deg)); transform-origin: 50% 100%; background: repeating-linear-gradient(90deg, transparent 0 4px, rgba(148, 163, 184, .2) 4px 6px); }
+.windmill-blades b { position: absolute; z-index: 2; width: 20px; height: 20px; border-radius: 50%; background: #d39159; transform: translate(-10px, -10px); box-shadow: 0 0 12px rgba(211, 145, 89, .35); }
+.scene-grass { position: absolute; z-index: 2; right: 0; bottom: 0; left: 0; height: 20%; opacity: .5; background: repeating-linear-gradient(78deg, transparent 0 13px, #19372e 14px 16px, transparent 17px 22px); }
+
+/* Login progress indicator */
+.login-loader { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border: 1px solid #cce2e0; border-radius: 9px; color: #163e44; background: #f1faf9; }
+.login-loader-ring { flex: 0 0 auto; width: 24px; height: 24px; border: 3px solid #bcded9; border-top-color: var(--teal); border-radius: 50%; animation: login-loader-spin .8s linear infinite; }
+.login-loader-copy { display: flex; flex-direction: column; gap: 2px; }
+.login-loader-copy strong { font-size: 13px; }.login-loader-copy small { font-size: 11px; }
+
+@keyframes blades-spin { to { transform: rotate(360deg); } }
+@keyframes moon-float { 50% { transform: translateY(8px); } }
+@keyframes scene-twinkle { from { opacity: .2; } to { opacity: 1; } }
+@keyframes cloud-drift { to { transform: translateX(calc(100vw + 300px)); } }
+@keyframes login-loader-spin { to { transform: rotate(360deg); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .scene-stars i, .scene-moon, .scene-cloud, .windmill-blades, .login-loader-ring { animation: none; }
+  .login-intro:hover .scene-windmill { transform: none; }
+}
 
 /* Responsive layout */
 @media (max-width: 1180px) {
@@ -295,7 +353,7 @@ textarea { resize: vertical; }
   .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .compact { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .login { grid-template-columns: 1fr; }
-  .login section { padding: 54px 30px 20px; }
+  .login-intro { min-height: 480px; padding: 54px 30px 20px; }
   .login form { max-width: 620px; margin: 22px 30px 40px; }
 }
 
@@ -316,7 +374,7 @@ textarea { resize: vertical; }
   .verified { grid-template-columns: 1fr; }
   .inline { flex-direction: column; }
   .inline .primary { width: 100%; }
-  .login section { padding: 40px 22px 12px; }
+  .login-intro { min-height: 430px; padding: 40px 22px 12px; }
   .login form { margin: 20px 16px 32px; padding: 24px; }
   .login h1 { font-size: 40px; }
 }

@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
 import Sidebar from "./components/Sidebar";
+import EveningLoginScene from "./components/EveningLoginScene";
+import LoginLoader from "./components/LoginLoader";
 import { API_URL } from "./lib/api";
 import "./styles.css";
 
@@ -168,9 +170,13 @@ function App() {
 function Login({ api, onLogin }) {
   const [email, setEmail] = useState("operator@demo.local"),
     [password, setPassword] = useState("DemoPass123!"),
-    [error, setError] = useState("");
+    [error, setError] = useState(""),
+    [loading, setLoading] = useState(false);
   const submit = async (e) => {
     e.preventDefault();
+    if (loading) return;
+    setError("");
+    setLoading(true);
     try {
       onLogin(
         await api("/auth/login", {
@@ -180,39 +186,48 @@ function Login({ api, onLogin }) {
       );
     } catch (e) {
       setError(e.message);
+    } finally {
+      setLoading(false);
     }
   };
   return (
     <div className="login">
-      <section>
-        <span className="eyebrow">INTAIN CAMPUS FINTECH CHALLENGE</span>
-        <h1>
-          Loan Data
-          <br />
-          <em>Verification Copilot</em>
-        </h1>
-        <p>
-          Turn messy loan tapes into reviewable, AI-assisted, human-approved
-          verified records.
-        </p>
+      <section className="login-intro">
+        <EveningLoginScene />
+        <div className="login-intro-copy">
+          <span className="eyebrow">INTAIN CAMPUS FINTECH CHALLENGE</span>
+          <h1>
+            Loan Data
+            <br />
+            <em>Verification Copilot</em>
+          </h1>
+          <p>
+            Turn messy loan tapes into reviewable, AI-assisted, human-approved
+            verified records.
+          </p>
+        </div>
       </section>
-      <form onSubmit={submit}>
+      <form onSubmit={submit} aria-busy={loading}>
         <h2>Welcome back</h2>
         <p>Use a seeded demo account to begin.</p>
         <label>
           Email
-          <input value={email} onChange={(e) => setEmail(e.target.value)} />
+          <input disabled={loading} value={email} onChange={(e) => setEmail(e.target.value)} />
         </label>
         <label>
           Password
           <input
             type="password"
+            disabled={loading}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
         </label>
         {error && <small className="error">{error}</small>}
-        <button className="primary">Sign in</button>
+        <button className="primary login-submit" disabled={loading}>
+          {loading ? "Please wait…" : "Sign in"}
+        </button>
+        {loading && <LoginLoader />}
         <small>
           Operator: upload · Reviewer: resolve · Consumer: verify/export
         </small>

@@ -100,7 +100,14 @@ Refresh the browser after the reset completes.
 
 ### Deployment summary
 
-Deploy the FastAPI backend on **Render** using `render.yaml`. Deploy the React frontend on **Vercel** with root directory `frontend` and `VITE_API_URL` set to the Render API URL (without `/api`). Then set the deployed Vercel URL in Render `CORS_ORIGINS` and redeploy the backend. Keep all MongoDB, JWT, and Groq secrets out of the frontend and Git repository.
+Deploy the FastAPI backend on **Render** using `render.yaml`. The React frontend can be deployed as a **Render Static Site** with root directory `frontend`, build command `npm install && npm run build`, publish directory `dist`, and `VITE_API_URL` set to the Render API URL (without `/api`). Add the deployed frontend URL to the backend's `CORS_ORIGINS`, then redeploy the backend. Keep all MongoDB, JWT, and Groq secrets out of the frontend and Git repository.
+
+### Customizing the login experience
+
+- The animated evening artwork is isolated in `frontend/src/components/EveningLoginScene.jsx`.
+- Its colors and animation are in the clearly marked **Login evening scene** section of `frontend/src/styles.css`. Start with the scoped `--scene-*` variables to change the palette.
+- The sign-in progress indicator is isolated in `frontend/src/components/LoginLoader.jsx`, with styles under **Login progress indicator**.
+- Both animations respect the device's reduced-motion preference.
 
 ## Deliverables
 
