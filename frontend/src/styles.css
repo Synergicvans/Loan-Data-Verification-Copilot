@@ -323,8 +323,8 @@ textarea { resize: vertical; }
 }
 
 /* Authentication */
-.login { display: grid; min-height: 100dvh; grid-template-columns: minmax(0, 1.2fr) minmax(360px, .8fr); color: #f4f7fb; background: #212121; }
-.login-intro { position: relative; display: flex; min-height: 100dvh; align-items: center; overflow: hidden; padding: clamp(52px, 14vh, 140px) clamp(30px, 12vw, 180px); isolation: isolate; }
+.login { position: relative; display: grid; min-height: 100dvh; overflow: hidden; grid-template-columns: minmax(0, 1.2fr) minmax(360px, .8fr); color: #f4f7fb; background: #07101f; isolation: isolate; }
+.login-intro { display: flex; min-height: 100dvh; align-items: center; padding: clamp(52px, 14vh, 140px) clamp(30px, 12vw, 180px); }
 .login-intro-copy { position: relative; z-index: 3; text-shadow: 0 2px 24px rgba(0, 0, 0, .4); }
 .login h1 { font-size: clamp(42px, 5vw, 56px); line-height: 1.03; }
 .login em { color: var(--mint); font-style: normal; }
@@ -332,7 +332,7 @@ textarea { resize: vertical; }
 .eyebrow { color: var(--mint); font-size: 11px; letter-spacing: 1.5px; }
 .dark { color: #566a85; }
 .login form { position: relative; display: flex; align-self: center; flex-direction: column; gap: 15px; margin: 30px 24px; padding: 36px; }
-.login-card { width: min(410px, calc(100% - 48px)); border: 1px solid rgba(255, 255, 255, .035); border-radius: 30px; color: #f1f4f5; background: #212121; box-shadow: 15px 15px 30px #151515, -15px -15px 30px #3c3c3c; }
+.login-card { z-index: 4; width: min(410px, calc(100% - 48px)); border: 1px solid rgba(255, 255, 255, .055); border-radius: 30px; color: #f1f4f5; background: rgba(33, 33, 33, .97); box-shadow: 15px 15px 30px rgba(10, 13, 18, .72), -12px -12px 30px rgba(77, 86, 101, .22); backdrop-filter: blur(10px); }
 .login form p, .login small { color: #aeb6bd; }
 .login label { display: flex; flex-direction: column; gap: 8px; font-size: 13px; font-weight: bold; }
 .login-card input { border-color: #42484d; color: #f4f7f8; background: #181a1b; }
@@ -376,7 +376,7 @@ textarea { resize: vertical; }
 .scene-hill { position: absolute; right: -12%; bottom: -22%; left: -12%; height: 54%; border-radius: 50% 50% 0 0; transform: rotate(-3deg); }
 .scene-hill-back { bottom: -14%; left: 20%; background: var(--scene-hill-back); opacity: .82; transform: rotate(5deg); }
 .scene-hill-front { background: var(--scene-hill-front); }
-.scene-windmill { position: absolute; z-index: 2; right: 11%; bottom: 18%; width: 128px; height: 260px; transition: transform .35s ease; }
+.scene-windmill { position: absolute; z-index: 2; bottom: 18%; left: calc(60% - 190px); width: 128px; height: 260px; transition: transform .35s ease; }
 .login-intro:hover .scene-windmill { transform: translateY(-4px); }
 .windmill-tower { position: absolute; right: 31px; bottom: 0; width: 68px; height: 185px; background: linear-gradient(100deg, #0c141e, var(--scene-windmill)); clip-path: polygon(25% 0, 75% 0, 100% 100%, 0 100%); }
 .windmill-tower i { position: absolute; bottom: 18px; left: 26px; width: 20px; height: 40px; border-radius: 9px 9px 0 0; background: #e8a866; box-shadow: 0 0 15px rgba(232, 168, 102, .5); }
