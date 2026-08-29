@@ -1,18 +1,33 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+
+function getTimePhase(date = new Date()) {
+  const hour = date.getHours();
+  if (hour >= 5 && hour < 10) return "sunrise";
+  if (hour >= 10 && hour < 17) return "day";
+  if (hour >= 17 && hour < 20) return "sunset";
+  return "night";
+}
 
 /**
  * Decorative login artwork. Change the scoped --scene-* variables in
  * styles.css to quickly retheme the evening scene.
  */
 export default function EveningLoginScene() {
+  const [phase, setPhase] = useState(() => getTimePhase());
+
+  useEffect(() => {
+    const timer = window.setInterval(() => setPhase(getTimePhase()), 60_000);
+    return () => window.clearInterval(timer);
+  }, []);
+
   return (
-    <div className="login-scene" aria-hidden="true">
+    <div className={`login-scene scene-${phase}`} aria-hidden="true">
       <div className="scene-stars">
         {Array.from({ length: 18 }, (_, index) => (
           <i key={index} />
         ))}
       </div>
-      <div className="scene-moon"><span /></div>
+      <div className="scene-celestial"><span /></div>
       <div className="scene-cloud scene-cloud-one" />
       <div className="scene-cloud scene-cloud-two" />
       <div className="scene-horizon" />

@@ -207,7 +207,7 @@ function Login({ api, onLogin }) {
           </p>
         </div>
       </section>
-      <form onSubmit={submit} aria-busy={loading}>
+      <form className="login-card" onSubmit={submit} aria-busy={loading}>
         <h2>Welcome back</h2>
         <p>Use a seeded demo account to begin.</p>
         <label>
