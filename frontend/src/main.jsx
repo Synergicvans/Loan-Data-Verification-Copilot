@@ -721,7 +721,7 @@ function Exceptions({ api, user, setMessage }) {
               <small>{r.title}</small>
             </span>
             <i className={labels[r.severity]}>{r.severity}</i>
-            <em className={labels[r.status]}>{r.status}</em>
+            <em className={labels[r.status]}>{r.status.replaceAll("_", " ")}</em>
           </button>
         ))}
         {!rows.length && <p>No exceptions match this filter.</p>}

@@ -159,10 +159,11 @@ textarea { resize: vertical; }
 /* Exception workflow */
 .split { display: grid; grid-template-columns: minmax(300px, 1.15fr) minmax(360px, 1fr); gap: 18px; }
 .row { display: flex; justify-content: space-between; gap: 12px; align-items: center; }
-.exception { display: grid; width: 100%; grid-template-columns: minmax(0, 1fr) 80px 110px; gap: 8px; padding: 14px 3px; border: 0; border-top: 1px solid #edf0f4; background: #fff; cursor: pointer; text-align: left; }
+.exception { display: grid; width: 100%; grid-template-columns: minmax(0, 1fr) 72px minmax(130px, auto); gap: 8px; padding: 14px 3px; border: 0; border-top: 1px solid #edf0f4; background: #fff; cursor: pointer; text-align: left; }
 .exception.selected { background: #eef8f8; }
 .exception span { display: flex; flex-direction: column; min-width: 0; }
-.exception small, .exception em { color: #687589; font-size: 12px; font-style: normal; }
+.exception small, .exception em { min-width: 0; color: #687589; font-size: 12px; font-style: normal; }
+.exception em { align-self: center; overflow-wrap: anywhere; line-height: 1.25; text-align: right; }
 .exception i { align-self: center; font-size: 11px; font-style: normal; font-weight: bold; }
 .detail { min-width: 0; min-height: 430px; }
 .facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin: 15px 0; }
@@ -470,7 +471,7 @@ textarea { resize: vertical; }
   .pipeline { font-size: 15px; line-height: 2; }
   .row { align-items: flex-start; flex-direction: column; }
   .row select { max-width: 100%; }
-  .exception { grid-template-columns: minmax(0, 1fr) 56px 92px; }
+  .exception { grid-template-columns: minmax(0, 1fr) 56px minmax(104px, auto); }
   .verified { grid-template-columns: 1fr; }
   .inline { flex-direction: column; }
   .inline .primary { width: 100%; }
