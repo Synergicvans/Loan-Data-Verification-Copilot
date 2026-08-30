@@ -250,7 +250,7 @@ function Login({ api, onLogin }) {
       3500,
     );
     const coldStartNotice = window.setTimeout(
-      () => setLoginStatus("Free hosting cold start — still working (up to 60 seconds)…"),
+      () => setLoginStatus("Free Render hosting sleeps when idle — server is waking (up to 60 seconds)…"),
       15000,
     );
     try {
@@ -291,10 +291,10 @@ function Login({ api, onLogin }) {
         <div className={`server-readiness ${serverStatus}`} role="status">
           <span aria-hidden="true" />
           {serverStatus === "ready"
-            ? "Demo server ready"
+            ? "Demo server ready · Free Render hosting sleeps when idle"
             : serverStatus === "waking"
-              ? "Free demo server is waking — first visit may take up to 60 seconds"
-              : "Preparing demo server in the background…"}
+              ? "Free Render hosting sleeps when idle — waking now (up to 60 seconds)"
+              : "Preparing the free demo server in the background…"}
         </div>
         <label>
           Email
