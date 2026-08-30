@@ -215,7 +215,26 @@ function Login({ api, onLogin }) {
   const [email, setEmail] = useState("operator@demo.local"),
     [password, setPassword] = useState(""),
     [error, setError] = useState(""),
-    [loading, setLoading] = useState(false);
+    [loading, setLoading] = useState(false),
+    [loginStatus, setLoginStatus] = useState("Verifying secure access…"),
+    [serverStatus, setServerStatus] = useState("checking");
+  useEffect(() => {
+    const controller = new AbortController();
+    const slowNotice = window.setTimeout(() => setServerStatus("waking"), 3500);
+    fetch(`${API}/health`, { signal: controller.signal })
+      .then((response) => {
+        if (!response.ok) throw new Error("Health check failed");
+        setServerStatus("ready");
+      })
+      .catch((requestError) => {
+        if (requestError.name !== "AbortError") setServerStatus("waking");
+      })
+      .finally(() => window.clearTimeout(slowNotice));
+    return () => {
+      controller.abort();
+      window.clearTimeout(slowNotice);
+    };
+  }, []);
   const submit = async (e) => {
     e.preventDefault();
     if (loading) return;
@@ -225,6 +244,15 @@ function Login({ api, onLogin }) {
       return;
     }
     setLoading(true);
+    setLoginStatus("Verifying secure access…");
+    const wakingNotice = window.setTimeout(
+      () => setLoginStatus("Waking the free demo server…"),
+      3500,
+    );
+    const coldStartNotice = window.setTimeout(
+      () => setLoginStatus("Free hosting cold start — still working (up to 60 seconds)…"),
+      15000,
+    );
     try {
       onLogin(
         await api("/auth/login", {
@@ -235,6 +263,8 @@ function Login({ api, onLogin }) {
     } catch (e) {
       setError(e.message);
     } finally {
+      window.clearTimeout(wakingNotice);
+      window.clearTimeout(coldStartNotice);
       setLoading(false);
     }
   };
@@ -258,6 +288,14 @@ function Login({ api, onLogin }) {
       <form className="login-card" onSubmit={submit} aria-busy={loading}>
         <h2>Welcome back</h2>
         <p>Use a seeded demo account to begin.</p>
+        <div className={`server-readiness ${serverStatus}`} role="status">
+          <span aria-hidden="true" />
+          {serverStatus === "ready"
+            ? "Demo server ready"
+            : serverStatus === "waking"
+              ? "Free demo server is waking — first visit may take up to 60 seconds"
+              : "Preparing demo server in the background…"}
+        </div>
         <label>
           Email
           <input
@@ -289,7 +327,7 @@ function Login({ api, onLogin }) {
           Operator: upload · Reviewer: resolve · Consumer: verify/export
         </small>
       </form>
-      {loading && <SpeedLoader message="Verifying secure access…" />}
+      {loading && <SpeedLoader message={loginStatus} />}
     </div>
   );
 }

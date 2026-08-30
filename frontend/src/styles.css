@@ -357,6 +357,12 @@ textarea { resize: vertical; }
 .login-card { z-index: 4; width: min(410px, calc(100% - 48px)); border: 1px solid rgba(255, 255, 255, .055); border-radius: 30px; color: #f1f4f5; background: rgba(33, 33, 33, .97); box-shadow: 15px 15px 30px rgba(10, 13, 18, .72), -12px -12px 30px rgba(77, 86, 101, .22); backdrop-filter: blur(10px); }
 .login form p, .login small { color: #aeb6bd; }
 .login-card .error { color: #ff958c; font-weight: 700; }
+.server-readiness { display: flex; align-items: center; gap: 8px; padding: 9px 11px; border: 1px solid rgba(85, 231, 225, .18); border-radius: 10px; color: #aebcc4; background: rgba(7, 15, 19, .5); font-size: 12px; line-height: 1.35; }
+.server-readiness span { flex: 0 0 8px; width: 8px; height: 8px; border-radius: 50%; background: #e9b760; box-shadow: 0 0 9px currentColor; animation: readiness-pulse 1.3s ease-in-out infinite; }
+.server-readiness.ready { color: #9fd9c9; border-color: rgba(99, 215, 198, .25); }
+.server-readiness.ready span { background: #63d7c6; animation: none; }
+.server-readiness.waking { color: #e6c98e; }
+@keyframes readiness-pulse { 50% { opacity: .35; transform: scale(.75); } }
 .login label { display: flex; flex-direction: column; gap: 8px; font-size: 13px; font-weight: bold; }
 .login-card input { border-color: #42484d; color: #f4f7f8; background: #181a1b; }
 .login-card input:focus { border-color: var(--mint); outline: 2px solid rgba(99, 215, 198, .14); }
