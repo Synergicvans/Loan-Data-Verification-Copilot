@@ -9,6 +9,7 @@ from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
 from pydantic import BaseModel, Field
 from ..database import get_db
 from ..security import require_roles
+from ..groq_support import groq_failure,probe_groq
 from ..services import audit, normalize_row, quality_from_failures
 from ..utils import serialize
 from ..validators import RULE_DEFINITIONS
@@ -72,10 +73,11 @@ def summary(user=Depends(require_roles("DATA_OPERATOR","REVIEWER","DATA_CONSUMER
 
 @router.get("/ai/status")
 def ai_status(user=Depends(require_roles("DATA_OPERATOR","REVIEWER","DATA_CONSUMER","ADMIN"))):
-    """Return readiness/model metadata without exposing the Groq API key."""
+    """Verify provider/model readiness without exposing the Groq API key."""
     from ..config import get_settings
     settings=get_settings()
-    return {"provider":"groq","model":settings.groq_model,"enabled":bool(settings.groq_api_key)}
+    readiness=probe_groq(settings.groq_api_key,settings.groq_model)
+    return {"provider":"groq","model":settings.groq_model,**readiness}
 
 @router.get("/dashboard/activity")
 def dashboard_activity(user=Depends(require_roles("DATA_OPERATOR","REVIEWER","DATA_CONSUMER","ADMIN")),db=Depends(get_db)):
@@ -200,7 +202,7 @@ def batch_summary(payload:BatchRequest,user=Depends(require_roles("REVIEWER","AD
     try:
         from groq import Groq
         text=Groq(api_key=s.groq_api_key).chat.completions.create(model=s.groq_model,messages=[{"role":"system","content":system_prompt},{"role":"user","content":json.dumps(exceptions)}]).choices[0].message.content
-    except Exception as exc:raise HTTPException(502,"Groq request failed") from exc
+    except Exception as exc:raise groq_failure(exc) from exc
     summary=_structured_batch_summary(text,exceptions);created_at=datetime.now(timezone.utc);audit(db,"AI_BATCH_SUMMARY_GENERATED",user,None,"AI batch exception summary generated; no loan data was changed.",metadata={"provider":"groq","model":s.groq_model,"exception_count":len(exceptions),"prompt_summary":"Plain-language batch exception summary","risk_level":summary["risk_level"]});return {"summary":summary,"exception_count":len(exceptions),"provider":"groq","model":s.groq_model,"created_at":created_at,"prompt_summary":"Plain-language batch exception summary"}
 
 @router.post("/ai/generate-rule")
@@ -209,5 +211,5 @@ def generate_rule(payload:NaturalLanguageRule,user=Depends(require_roles("REVIEW
     try:
         from groq import Groq
         text=Groq(api_key=s.groq_api_key).chat.completions.create(model=s.groq_model,messages=[{"role":"system","content":system_prompt},{"role":"user","content":payload.description}]).choices[0].message.content
-    except Exception as exc:raise HTTPException(502,"Groq request failed") from exc
+    except Exception as exc:raise groq_failure(exc) from exc
     proposal=_structured_rule_proposal(text,payload.description);created_at=datetime.now(timezone.utc);audit(db,"AI_RULE_SUGGESTION_GENERATED",user,None,"AI validation-rule suggestion generated; no rule or data was changed.",metadata={"provider":"groq","model":s.groq_model,"prompt_summary":payload.description,"is_rule_recommended":proposal["is_rule_recommended"]});return {"proposal":proposal,"provider":"groq","model":s.groq_model,"created_at":created_at,"prompt_summary":payload.description}

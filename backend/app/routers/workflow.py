@@ -12,6 +12,7 @@ from ..security import require_roles
 from ..services import audit,canonical_hash,combined_validation_failures,quality_from_failures,revalidate_loan
 from ..validators import validate_loan
 from ..utils import serialize
+from ..groq_support import groq_failure
 router=APIRouter(tags=["Review workflow"])
 EDITABLE_LOAN_FIELDS={"borrower_id","loan_type","origination_date","maturity_date","original_principal","current_balance","interest_rate","term_months","borrower_state","loan_purpose","credit_grade","employment_length","income_band","payment_status","days_past_due","servicer_name","last_payment_date","last_updated_at","document_status","source_system"}
 ACTIONABLE_EXCEPTION_STATUSES={"OPEN","UNDER_REVIEW","CORRECTION_REQUESTED"}
@@ -103,7 +104,7 @@ def ai_review(exception_id:str,user=Depends(require_roles("REVIEWER","ADMIN")),d
         from groq import Groq
         model_text=Groq(api_key=s.groq_api_key).chat.completions.create(model=s.groq_model,messages=[{"role":"system","content":system_prompt},{"role":"user","content":prompt}]).choices[0].message.content
     except Exception as err:
-        raise HTTPException(502,f"Groq review failed ({type(err).__name__}). Check GROQ_MODEL and your Groq project permissions.") from err
+        raise groq_failure(err) from err
     result=_parse_ai_review_response(model_text,ex)
     review={"exception_id":ex["_id"],"loan_id":ex["loan_id"],"provider":"groq","model":s.groq_model,"request_type":"COMPARE_AND_SUGGEST" if source_comparison else "EXPLAIN_AND_SUGGEST","system_instruction":system_prompt,"prompt":prompt,"prompt_summary":ex["description"],"source_comparison":source_comparison,"response":result,"created_at":datetime.now(timezone.utc),"requested_by":user["_id"]};review["_id"]=db.ai_reviews.insert_one(review).inserted_id;audit(db,"AI_RECOMMENDATION_GENERATED",user,ex["loan_id"],"AI recommendation generated; no loan data was changed.",metadata={"ai_review_id":str(review["_id"]),"provider":"groq","model":s.groq_model,"prompt_summary":review["prompt_summary"],"suggested_field":result.get("suggested_field"),"suggested_value":result.get("suggested_value"),"confidence":result.get("confidence"),"recommended_source":result.get("recommended_source"),"source_comparison_count":len(source_comparison)});return serialize(review)
 @router.post("/exceptions/{exception_id}/decision",status_code=201)

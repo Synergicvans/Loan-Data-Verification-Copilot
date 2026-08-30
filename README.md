@@ -104,6 +104,12 @@ Refresh the browser after the reset completes.
 
 Deploy the FastAPI backend on **Render** using `render.yaml`. The React frontend can be deployed as a **Render Static Site** with root directory `frontend`, build command `npm install && npm run build`, publish directory `dist`, and `VITE_API_URL` set to the Render API URL (without `/api`). Add the deployed frontend URL to the backend's `CORS_ORIGINS`, then redeploy the backend. Keep all MongoDB, JWT, and Groq secrets out of the frontend and Git repository.
 
+### Groq troubleshooting
+
+The dashboard now verifies the configured Groq key and model instead of treating a non-empty environment variable as proof of connectivity. If AI review fails, the UI distinguishes a rejected key, missing model access, rate limit/quota, temporary connection failure, and general provider failure.
+
+For a rejected key, create a replacement in GroqCloud, update `GROQ_API_KEY` in the Render backend service, and redeploy. Keep `GROQ_MODEL=qwen/qwen3.6-27b` unless the Groq model catalogue or your project access requires a different supported model. Never commit the key.
+
 ### Customizing the login experience
 
 - The animated artwork is isolated in `frontend/src/components/EveningLoginScene.jsx`. It reads the visitor's local time and automatically switches between sunrise (05:00–10:00), daytime (10:00–17:00), sunset (17:00–20:00), and night (20:00–05:00).

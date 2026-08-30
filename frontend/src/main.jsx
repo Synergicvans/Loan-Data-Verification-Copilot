@@ -53,7 +53,10 @@ function getApiError(payload, status, path) {
   if (status === 409) return extractErrorText(payload) || "This action conflicts with existing data.";
   if (status === 413) return "The selected file is too large.";
   if (status === 422) return extractErrorText(payload?.detail) || "Please check the entered information.";
-  if (status === 429) return "Too many requests. Please wait and try again.";
+  if (status === 429)
+    return extractErrorText(payload) || "Too many requests. Please wait and try again.";
+  if (status === 502 || status === 503)
+    return extractErrorText(payload) || "The AI service is temporarily unavailable.";
   if (status >= 500) return "The server could not complete the request. Please try again.";
   return extractErrorText(payload) || "The request could not be completed.";
 }
@@ -323,12 +326,12 @@ function Dashboard({ data, reload, user, onNavigate }) {
         <section className="panel">
           <h2>AI Review Assistant</h2>
           <p className={ai?.enabled ? "ai-ready" : "ai-offline"}>
-            {ai?.enabled ? "● Groq connected" : "● Groq not configured"}
+            {ai?.enabled ? "● Groq connected" : "● Groq unavailable"}
           </p>
           <p className="hint">
             {ai?.enabled
               ? `On-demand model: ${ai.model}`
-              : "Add GROQ_API_KEY to backend/.env, then restart FastAPI."}
+              : ai?.reason || "Check GROQ_API_KEY and GROQ_MODEL, then restart FastAPI."}
           </p>
         </section>
         <section className="panel">
