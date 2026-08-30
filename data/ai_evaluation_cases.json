@@ -1,0 +1,44 @@
+[
+  {
+    "id": "valid-balance-correction",
+    "description": "A well-formed recommendation keeps the suggested field and value.",
+    "exception": {"severity": "HIGH", "description": "Balance conflicts with the servicing source."},
+    "model_output": "{\"severity\":\"HIGH\",\"explanation\":\"The newer servicing evidence reports a lower balance.\",\"suggested_field\":\"current_balance\",\"suggested_value\":750,\"confidence\":\"HIGH\",\"reasoning\":\"Confirm the servicing timestamp before accepting.\"}",
+    "expected": {"suggested_field": "current_balance", "suggested_value": 750, "confidence": "HIGH"}
+  },
+  {
+    "id": "zero-value-preserved",
+    "description": "A valid numeric zero must not be mistaken for a missing suggestion.",
+    "exception": {"severity": "MEDIUM", "description": "A closed loan retains a balance."},
+    "model_output": "{\"severity\":\"MEDIUM\",\"explanation\":\"The closed loan should be reviewed.\",\"suggested_field\":\"current_balance\",\"suggested_value\":0,\"confidence\":\"MEDIUM\",\"reasoning\":\"Confirm payoff evidence first.\"}",
+    "expected": {"suggested_field": "current_balance", "suggested_value": 0, "confidence": "MEDIUM"}
+  },
+  {
+    "id": "thinking-text-removed",
+    "description": "Private model reasoning surrounding JSON is not exposed to the reviewer.",
+    "exception": {"severity": "MEDIUM", "description": "State code is invalid."},
+    "model_output": "<think>private chain of thought</think>{\"severity\":\"MEDIUM\",\"explanation\":\"The state code is not recognized.\",\"suggested_field\":\"borrower_state\",\"suggested_value\":\"CA\",\"confidence\":\"LOW\",\"reasoning\":\"Confirm the original application.\"}",
+    "expected": {"suggested_field": "borrower_state", "suggested_value": "CA", "confidence": "LOW", "forbidden_text": "private chain of thought"}
+  },
+  {
+    "id": "markdown-json-accepted",
+    "description": "Accidental JSON markdown fences are removed safely.",
+    "exception": {"severity": "HIGH", "description": "Principal is negative."},
+    "model_output": "```json\n{\"severity\":\"HIGH\",\"explanation\":\"The principal is invalid.\",\"suggested_field\":null,\"suggested_value\":null,\"confidence\":\"LOW\",\"reasoning\":\"Request corrected source evidence.\"}\n```",
+    "expected": {"suggested_field": null, "suggested_value": null, "confidence": "LOW"}
+  },
+  {
+    "id": "malformed-output-fails-closed",
+    "description": "Malformed model output produces no editable suggestion.",
+    "exception": {"severity": "HIGH", "description": "Required fields are missing."},
+    "model_output": "I think this loan should probably be approved.",
+    "expected": {"suggested_field": null, "suggested_value": null, "confidence": "LOW"}
+  },
+  {
+    "id": "empty-output-fails-closed",
+    "description": "An empty provider response produces conservative reviewer guidance.",
+    "exception": {"severity": "MEDIUM", "description": "Document status needs review."},
+    "model_output": "",
+    "expected": {"suggested_field": null, "suggested_value": null, "confidence": "LOW"}
+  }
+]

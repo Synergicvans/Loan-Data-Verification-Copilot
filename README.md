@@ -122,4 +122,6 @@ Deploy the FastAPI backend on **Render** using `render.yaml`. The React frontend
 - [Validation rules](data/validation_rules.json)
 - [Demo walkthrough](docs/demo-script.md)
 - [AI development log](docs/ai-development-log.md)
+- [AI quality and safety evaluation](docs/ai-evaluation.md)
+- [Judging evidence map](docs/judging-evidence.md)
 - [Deployment guide](docs/deployment.md)
