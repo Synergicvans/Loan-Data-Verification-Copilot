@@ -12,7 +12,8 @@ export default function Sidebar({
     <aside className="sidebar" aria-label="Application navigation">
       <div className="sidebar-top">
         <div className="brand">
-          INTAIN <span>VERIFY</span>
+          <img src="/favicon.svg" alt="" />
+          <span className="brand-name">INTAIN <b>VERIFY</b></span>
         </div>
         <p className="role">{user.role.replace("_", " ")}</p>
       </div>

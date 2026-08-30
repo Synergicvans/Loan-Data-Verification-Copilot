@@ -112,6 +112,7 @@ Deploy the FastAPI backend on **Render** using `render.yaml`. The React frontend
 - Both animations respect the device's reduced-motion preference.
 - The signed-in application theme is controlled by the **Authenticated cyber theme** section in `frontend/src/styles.css`. Change its scoped `--cyber-*` variables to update the background, cards, text, borders, and accent colors together.
 - The subtle right-edge feedback cat is implemented in `frontend/src/components/FeedbackCat.jsx`. Authenticated submissions are validated by `backend/app/routers/feedback.py` and stored in MongoDB's `feedback` collection.
+- The browser and sidebar product mark is `frontend/public/favicon.svg`; replace that one file to update the identity everywhere it is used.
 
 ## Deliverables
 

@@ -36,8 +36,9 @@ button { touch-action: manipulation; }
   background: var(--navy);
 }
 .sidebar-top { flex: 0 0 auto; }
-.brand { margin: 4px 10px 24px; color: #fff; font-size: 20px; font-weight: 800; letter-spacing: 1px; }
-.brand span { color: var(--mint); }
+.brand { display: flex; align-items: center; gap: 10px; margin: 4px 10px 24px; color: #fff; font-size: 20px; font-weight: 800; letter-spacing: 1px; }
+.brand img { width: 34px; height: 34px; border-radius: 9px; box-shadow: 0 0 18px rgba(99, 215, 198, .16); }
+.brand-name { color: #fff; white-space: nowrap; }.brand-name b { color: var(--mint); }
 .role { margin: 0 10px; color: #7f9bbb; font-size: 11px; letter-spacing: 1px; }
 .sidebar-nav {
   display: flex;
