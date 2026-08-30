@@ -24,7 +24,14 @@ def probe_groq(api_key: str | None, model: str) -> dict:
     try:
         from groq import Groq
 
-        Groq(api_key=api_key).models.retrieve(model)
+        # Listing models avoids path-encoding problems in the retrieve endpoint
+        # for IDs containing a slash (for example ``openai/gpt-oss-20b``).
+        available = {item.id for item in Groq(api_key=api_key).models.list().data}
+        if model not in available:
+            return {
+                "enabled": False,
+                "reason": "The configured Groq model is not available to this project. Check GROQ_MODEL in Render.",
+            }
         return {"enabled": True, "reason": None}
     except Exception as exc:
         failure = groq_failure(exc)
