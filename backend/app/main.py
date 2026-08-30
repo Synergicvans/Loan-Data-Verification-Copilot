@@ -3,7 +3,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from .config import get_settings
 from .database import create_database,ensure_indexes
-from .routers import advanced,auth,uploads,workflow
+from .routers import advanced,auth,feedback,uploads,workflow
 @asynccontextmanager
 async def lifespan(app):
     app.state.db=create_database()
@@ -19,4 +19,4 @@ app.add_middleware(CORSMiddleware,allow_origins=sorted(cors_origins),allow_crede
 def root():return {"service":"Loan Data Verification Copilot API","status":"ok","docs":"/docs","health":"/health"}
 @app.get("/health")
 def health():return {"status":"ok","service":"loan-data-verification-copilot"}
-for router in (auth.router,uploads.router,workflow.router,advanced.router):app.include_router(router,prefix="/api")
+for router in (auth.router,uploads.router,workflow.router,advanced.router,feedback.router):app.include_router(router,prefix="/api")

@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 import Sidebar from "./components/Sidebar";
 import EveningLoginScene from "./components/EveningLoginScene";
 import SpeedLoader from "./components/SpeedLoader";
+import FeedbackCat from "./components/FeedbackCat";
 import { API_URL } from "./lib/api";
 import "./styles.css";
 
@@ -145,6 +146,7 @@ function App() {
         signingOut={signingOut}
       />
       {signingOut && <SpeedLoader />}
+      <FeedbackCat api={api} />
       <main className="content">
         <header>
           <div>
